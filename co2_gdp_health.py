@@ -7,6 +7,8 @@ Created on Mon Apr  3 17:22:17 2023
 
 import pandas as pd
 import matplotlib.pyplot as plt
+import scipy.stats as stats
+import numpy as np
 
 def read_clean_transpose(filename):
     data_frame = pd.read_excel(filename)
@@ -36,10 +38,61 @@ def gdp_growth_trend(df):
     top_five_year.plot(kind ='bar',)
     plt.title("GDP GROWTH TREND OF TOP CARBON EMITTING COUNTRIES")
     plt.ylabel("GDP GROWTH")
-    plt.xlabel("COUNTRY")    
+    plt.xlabel("COUNTRY")
     
-    
+def indicator_comparison():
+    df = pd.read_excel("statistics1.xlsx")
+    print(df)
+    df3 = df.groupby('Country Name')[["Life expectancy","Mortality rate","Current health expenditure"]].describe()
+    df3.to_excel("hope.xlsx")
+    aver = df.groupby('Country Name')[["Life expectancy","Mortality rate","Current health expenditure"]].mean()
+    print("Skewness", stats.skew(df.groupby('Country Name')["Life expectancy"]))
+    print("Kurtosis", stats.kurtosis(df_ftse["Return"]))
 
+def statistics_comparison():
+    indicator_comparison = pd.read_excel("statistics1.xlsx")
+    statistics_description = indicator_comparison.groupby('Country Name')[["Life expectancy","Mortality rate","Current health expenditure"]].describe()
+    statistics_median = indicator_comparison.groupby('Country Name')[["Life expectancy","Mortality rate","Current health expenditure"]].median()
+    statistics_description.to_excel("statistics_description.xlsx")
+    world_indicators = indicator_comparison[indicator_comparison['Country Name'] == 'World']
+    china_indicators = indicator_comparison[indicator_comparison['Country Name'] == 'China']
+    india_indicators = indicator_comparison[indicator_comparison['Country Name'] == 'India']
+
+    print(stats.skew(world_indicators["Life expectancy"]))
+    print(stats.skew(world_indicators["Current health expenditure"]))
+    print(stats.skew(world_indicators["Mortality rate"]))
+    print(stats.skew(china_indicators["Life expectancy"]))
+    print(stats.skew(china_indicators["Current health expenditure"]))
+    print(stats.skew(china_indicators["Mortality rate"]))
+    print(stats.skew(india_indicators["Life expectancy"]))
+    print(stats.skew(india_indicators["Current health expenditure"]))
+    print(stats.skew(india_indicators["Mortality rate"]))
+    print(stats.kurtosis(world_indicators["Life expectancy"]))
+    print(stats.kurtosis(world_indicators["Current health expenditure"]))
+    print(stats.kurtosis(world_indicators["Mortality rate"]))
+    print(stats.kurtosis(china_indicators["Life expectancy"]))
+    print(stats.kurtosis(china_indicators["Current health expenditure"]))
+    print(stats.kurtosis(china_indicators["Mortality rate"]))
+    print(stats.kurtosis(india_indicators["Life expectancy"]))
+    print(stats.kurtosis(india_indicators["Current health expenditure"]))
+    print(stats.kurtosis(india_indicators["Mortality rate"]))
+    
+def correlation_analysis(filename):
+    
+    df = pd.read_excel(filename)
+    pear_corr=df.corr(method='pearson')
+    fig, ax = plt.subplots(figsize=(8,8))
+    im = ax.imshow(pear_corr, interpolation='nearest')
+    fig.colorbar(im, orientation='vertical', fraction = 0.05)
+    ax.set_xticks([0, 1, 2, 3, 4])
+    ax.set_xticklabels(df.columns, rotation=65, fontsize=15)
+    ax.set_yticks([0, 1, 2, 3, 4])
+    ax.set_yticklabels(df.columns, rotation=0, fontsize=15)
+    for i in range(len(df.columns)):
+        for j in range(len(df.columns)):
+            text = ax.text(j, i, round(pear_corr.to_numpy()[i, j], 2), ha="center", va="center", color="black")
+
+    plt.show()
 
 if __name__ == "__main__":
 
@@ -50,6 +103,8 @@ if __name__ == "__main__":
     co2_emission_trend(co_2)
     gdp_growth, gdp_growth_trans = read_clean_transpose('gdp.xls')
     gdp_growth_trend(gdp_growth)
+    statistics_comparison()
+    correlation_analysis('china_heat.xlsx')
     
     
     
