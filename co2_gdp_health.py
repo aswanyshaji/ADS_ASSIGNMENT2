@@ -19,8 +19,8 @@ def read_clean_transpose(filename):
     #make country name as index
     data_frame.set_index('Country Name', inplace = True)
     #delete unwanted columns
-    data_frame.drop(labels = ['Country Code', 'Indicator Name', 'Indicator \
-                                              Code'], axis = 1, inplace = True)
+    data_frame.drop(labels = ['Country Code', 'Indicator Name', \
+                                    'Indicator Code'], axis = 1, inplace = True)
     #delete empty rows
     data_frame.dropna(axis = 0,how = 'all',thresh = None, subset = None, \
                                                                 inplace = True)
@@ -78,11 +78,11 @@ def statistics_comparison():
     indicator_comparison = pd.read_excel("statistics1.xlsx")
     # use descibe to find out statistical properties of each indiactor group by 
     #country
-    statistics_description = indicator_comparison.groupby('Country Name')[["Life\
-        expectancy", "Mortality rate", "Current health expenditure"]].describe()
+    statistics_description = indicator_comparison.groupby('Country Name')[[\
+   "Life expectancy", "Mortality rate", "Current health expenditure"]].describe()
     # find median of each indiactor group by country
-    statistics_median = indicator_comparison.groupby('Country Name')[["Life \
-            expectancy","Mortality rate","Current health expenditure"]].median()
+    statistics_median = indicator_comparison.groupby('Country Name')[[\
+    "Life expectancy","Mortality rate","Current health expenditure"]].median()
     # write the result into an excel file for further analysis
     statistics_description.to_excel("statistics_description.xlsx")
     statistics_median.to_excel("statistics_median.xlsx")
@@ -94,6 +94,7 @@ def statistics_comparison():
                                                                     == 'China']
     # extract indicator data over 10 years corresponding to India 
     india_indicators = indicator_comparison[indicator_comparison['Country Name']\
+                                                                    == 'India']
     #calculate skewness and kurtosis of indictors of world, China, India                                                                == 'India']
     print(stats.skew(world_indicators["Life expectancy"]))
     print(stats.skew(world_indicators["Current health expenditure"]))
@@ -149,7 +150,7 @@ if __name__ == "__main__":
     gdp_growth_trend(gdp_growth)
     #call the function to analyse statistical properties
     statistics_comparison()
-    #call the function to find out correlatipon and draw the heat map
+    #call the function to find out correlation and draw the heat map
     correlation_analysis('china_heat.xlsx')
     correlation_analysis('india_heat.xlsx')
     
