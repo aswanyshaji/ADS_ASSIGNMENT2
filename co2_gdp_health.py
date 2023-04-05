@@ -17,7 +17,6 @@ def read_clean_transpose(filename):
     data_frame.dropna(axis=0,how='all',thresh=None, subset=None, inplace=True)
     data_frame.dropna(axis=1,how='all',thresh=None, subset=None, inplace=True)
     clean_df_transpose = data_frame.transpose()
-    #clean_df_transpose.rename(columns={'index':'Year'}, inplace = True)
     clean_df_transpose = clean_df_transpose.rename_axis('Year') 
     return data_frame, clean_df_transpose
 
@@ -69,20 +68,18 @@ def statistics_comparison():
     print(stats.kurtosis(india_indicators["Mortality rate"]))
     
 def correlation_analysis(filename):
-    
-    df = pd.read_excel(filename)
-    pear_corr=df.corr(method='pearson')
+    correlation_data = pd.read_excel(filename)
+    pear_corr=correlation_data.corr(method='pearson')
     fig, ax = plt.subplots(figsize=(8,8))
     im = ax.imshow(pear_corr, cmap = 'spring', interpolation='nearest')
     fig.colorbar(im, orientation='vertical', fraction = 0.05)
     ax.set_xticks([0, 1, 2, 3, 4])
-    ax.set_xticklabels(df.columns, rotation=90, fontsize=20)
+    ax.set_xticklabels(correlation_data.columns, rotation=90, fontsize=20)
     ax.set_yticks([0, 1, 2, 3, 4])
-    ax.set_yticklabels(df.columns, rotation=0, fontsize=20)
-    for i in range(len(df.columns)):
-        for j in range(len(df.columns)):
+    ax.set_yticklabels(correlation_data.columns, rotation=0, fontsize=20)
+    for i in range(len(correlation_data.columns)):
+        for j in range(len(correlation_data.columns)):
             text = ax.text(j, i, round(pear_corr.to_numpy()[i, j], 2), ha="center", va="center", color="black")
-
     plt.show()
 
 if __name__ == "__main__":
